@@ -49,3 +49,16 @@ def delete_waste_material(id: int) -> None:
             save_db(db)
             return
     raise HTTPException(status_code=404, detail=f"No waste material with id={id}")
+
+
+@app.put("/api/waste-materials/{id}", response_model=WasteMaterialOutput)
+def change_waste_material(id: int, new_data: WasteMaterialInput) -> WasteMaterialOutput:
+    for waste_material in db:
+        if waste_material.id == id:
+            waste_material.name_en = new_data.name_en
+            waste_material.name_kr = new_data.name_kr
+            waste_material.description = new_data.description
+            waste_material.recyclable = new_data.recyclable
+            save_db(db)
+            return waste_material
+    raise HTTPException(status_code=404, detail=f"No waste material with id={id}")
