@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 
 from schemas import WasteMaterialInput, WasteMaterialOutput, load_db, save_db
 
-app = FastAPI()
+app = FastAPI(title="BinBuddyKorea API")
 
 db = load_db()
 
