@@ -14,6 +14,17 @@ class WasteMaterialOutput(WasteMaterialInput):
     id: int
 
 
+class BinInput(BaseModel):
+    name_en: str
+    name_kr: str
+    description: str | None = "Todo"
+
+
+class BinOutput(BinInput):
+    id: int
+    waste_materials: list[WasteMaterialOutput] = []
+
+
 def load_db() -> list[WasteMaterialOutput]:
     """Load a list of WasteMaterial objects from a JSON file"""
     with open("waste-materials.json") as f:
