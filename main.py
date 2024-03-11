@@ -3,13 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, HTTPException
 from sqlmodel import Session, SQLModel, create_engine, select
 
-from schemas import (
-    WasteMaterial,
-    WasteMaterialInput,
-    WasteMaterialOutput,
-    load_db,
-    save_db,
-)
+from schemas import WasteMaterial, WasteMaterialInput, load_db
 
 
 @asynccontextmanager
@@ -48,11 +42,15 @@ def get_waste_materials(
     return list(session.exec(query).all())
 
 
-@app.get("/api/waste-materials/{id}")
-def get_waste_material_by_id(id: int) -> dict:
-    for waste_material in db:
-        if waste_material.id == id:
-            return waste_material.dict()
+@app.get("/api/waste-materials/{id}", response_model=WasteMaterial)
+def get_waste_material_by_id(
+    id: int, session: Session = Depends(get_session)
+) -> WasteMaterial:
+    waste_material = session.get(WasteMaterial, id)
+
+    if waste_material:
+        return waste_material
+
     raise HTTPException(status_code=404, detail=f"No waste material found with id={id}")
 
 
@@ -60,7 +58,6 @@ def get_waste_material_by_id(id: int) -> dict:
 def add_waste_material(
     waste_material_input: WasteMaterialInput, session: Session = Depends(get_session)
 ) -> WasteMaterial:
-    with Session(engine) as session:
     new_waste_material = WasteMaterial.model_validate(waste_material_input)
     session.add(new_waste_material)
     session.commit()
@@ -69,23 +66,28 @@ def add_waste_material(
 
 
 @app.delete("/api/waste-materials/{id}", status_code=204)
-def delete_waste_material(id: int) -> None:
-    for waste_material in db:
-        if waste_material.id == id:
-            db.remove(waste_material)
-            save_db(db)
-            return
-    raise HTTPException(status_code=404, detail=f"No waste material with id={id}")
+def delete_waste_material(id: int, session: Session = Depends(get_session)) -> None:
+    waste_material = session.get(WasteMaterial, id)
+
+    if waste_material:
+        session.delete(waste_material)
+        session.commit()
+    else:
+        raise HTTPException(status_code=404, detail=f"No waste material with id={id}")
 
 
-@app.put("/api/waste-materials/{id}", response_model=WasteMaterialOutput)
-def change_waste_material(id: int, new_data: WasteMaterialInput) -> WasteMaterialOutput:
-    for waste_material in db:
-        if waste_material.id == id:
-            waste_material.name_en = new_data.name_en
-            waste_material.name_kr = new_data.name_kr
-            waste_material.description = new_data.description
-            waste_material.recyclable = new_data.recyclable
-            save_db(db)
-            return waste_material
+@app.put("/api/waste-materials/{id}", response_model=WasteMaterial)
+def change_waste_material(
+    id: int, new_data: WasteMaterialInput, session: Session = Depends(get_session)
+) -> WasteMaterial:
+    waste_material = session.get(WasteMaterial, id)
+
+    if waste_material:
+        waste_material.name_en = new_data.name_en
+        waste_material.name_kr = new_data.name_kr
+        waste_material.description = new_data.description
+        waste_material.recyclable = new_data.recyclable
+        session.commit()
+        return waste_material
+
     raise HTTPException(status_code=404, detail=f"No waste material with id={id}")
