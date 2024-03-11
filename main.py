@@ -61,11 +61,11 @@ def add_waste_material(
     waste_material_input: WasteMaterialInput, session: Session = Depends(get_session)
 ) -> WasteMaterial:
     with Session(engine) as session:
-        new_waste_material = WasteMaterial.model_validate(waste_material_input)
-        session.add(new_waste_material)
-        session.commit()
-        session.refresh(new_waste_material)
-        return new_waste_material
+    new_waste_material = WasteMaterial.model_validate(waste_material_input)
+    session.add(new_waste_material)
+    session.commit()
+    session.refresh(new_waste_material)
+    return new_waste_material
 
 
 @app.delete("/api/waste-materials/{id}", status_code=204)
