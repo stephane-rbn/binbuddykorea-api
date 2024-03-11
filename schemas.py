@@ -1,9 +1,9 @@
 import json
 
-from pydantic import BaseModel
+from sqlmodel import Field, SQLModel
 
 
-class WasteMaterialInput(BaseModel):
+class WasteMaterialInput(SQLModel):
     name_en: str
     name_kr: str
     description: str | None = "Todo"
@@ -14,7 +14,12 @@ class WasteMaterialOutput(WasteMaterialInput):
     id: int
 
 
-class BinInput(BaseModel):
+class WasteMaterial(WasteMaterialInput, table=True):
+    __tablename__: str = "waste_materials"
+    id: int | None = Field(default=None, primary_key=True)
+
+
+class BinInput(SQLModel):
     name_en: str
     name_kr: str
     description: str | None = "Todo"

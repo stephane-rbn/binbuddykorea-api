@@ -1,22 +1,51 @@
-from fastapi import FastAPI, HTTPException
+from contextlib import asynccontextmanager
 
-from schemas import WasteMaterialInput, WasteMaterialOutput, load_db, save_db
+from fastapi import Depends, FastAPI, HTTPException
+from sqlmodel import Session, SQLModel, create_engine, select
 
-app = FastAPI(title="BinBuddyKorea API")
+from schemas import (
+    WasteMaterial,
+    WasteMaterialInput,
+    WasteMaterialOutput,
+    load_db,
+    save_db,
+)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # startup logic
+    SQLModel.metadata.create_all(engine)
+    yield
+    # shutdown logic
+
+
+app = FastAPI(title="BinBuddyKorea API", lifespan=lifespan)
 
 db = load_db()
 
+engine = create_engine(
+    "sqlite:///binbuddykorea.db",
+    connect_args={"check_same_thread": False},  # Needed for SQLite
+    echo=True,  # Log generated SQL (to remove)
+)
+
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+
 
 @app.get("/api/waste-materials")
-def get_waste_materials(recyclable: bool | None = None) -> list:
+def get_waste_materials(
+    recyclable: bool | None = None, session: Session = Depends(get_session)
+) -> list:
+    query = select(WasteMaterial)
+
     if isinstance(recyclable, bool):
-        matching_records = []
-        for waste_material in db:
-            if waste_material.recyclable == recyclable:
-                matching_records.append(waste_material)
-        return matching_records
-    else:
-        return db
+        query = query.where(WasteMaterial.recyclable == recyclable)
+
+    return list(session.exec(query).all())
 
 
 @app.get("/api/waste-materials/{id}")
@@ -27,18 +56,16 @@ def get_waste_material_by_id(id: int) -> dict:
     raise HTTPException(status_code=404, detail=f"No waste material found with id={id}")
 
 
-@app.post("/api/waste-materials", response_model=WasteMaterialOutput)
-def add_waste_material(waste_material: WasteMaterialInput) -> WasteMaterialOutput:
-    new_waste_material = WasteMaterialOutput(
-        id=len(db) + 1,
-        name_en=waste_material.name_en,
-        name_kr=waste_material.name_kr,
-        description=waste_material.description,
-        recyclable=waste_material.recyclable,
-    )
-    db.append(new_waste_material)
-    save_db(db)
-    return new_waste_material
+@app.post("/api/waste-materials", response_model=WasteMaterial)
+def add_waste_material(
+    waste_material_input: WasteMaterialInput, session: Session = Depends(get_session)
+) -> WasteMaterial:
+    with Session(engine) as session:
+        new_waste_material = WasteMaterial.model_validate(waste_material_input)
+        session.add(new_waste_material)
+        session.commit()
+        session.refresh(new_waste_material)
+        return new_waste_material
 
 
 @app.delete("/api/waste-materials/{id}", status_code=204)
