@@ -159,4 +159,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
+# Ignore VSCode workspace configuration folder
 .vscode/
+
+# Ignore SQLite db file
+*.db
