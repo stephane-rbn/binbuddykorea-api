@@ -15,7 +15,7 @@ class WasteMaterialOutput(WasteMaterialInput):
 class WasteMaterial(WasteMaterialInput, table=True):
     __tablename__: str = "waste_materials"
     id: int | None = Field(default=None, primary_key=True)
-    bin_id: int = Field(foreign_key="bins.id")
+    bin_id: int | None = Field(default=None, foreign_key="bins.id")
     bin: "Bin" = Relationship(back_populates="waste_materials")
 
 
