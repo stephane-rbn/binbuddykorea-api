@@ -1,6 +1,4 @@
-import json
-
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 
 class WasteMaterialInput(SQLModel):
@@ -17,6 +15,8 @@ class WasteMaterialOutput(WasteMaterialInput):
 class WasteMaterial(WasteMaterialInput, table=True):
     __tablename__: str = "waste_materials"
     id: int | None = Field(default=None, primary_key=True)
+    bin_id: int = Field(foreign_key="bins.id")
+    bin: "Bin" = Relationship(back_populates="waste_materials")
 
 
 class BinInput(SQLModel):
@@ -30,26 +30,7 @@ class BinOutput(BinInput):
     waste_materials: list[WasteMaterialOutput] = []
 
 
-def load_db() -> list[WasteMaterialOutput]:
-    """Load a list of WasteMaterial objects from a JSON file"""
-    with open("waste-materials.json") as f:
-        json_data = json.load(f)
-
-        waste_materials = []
-
-        for obj in json_data:
-            waste_material = WasteMaterialOutput.model_validate(obj)
-            waste_materials.append(waste_material)
-
-        return waste_materials
-
-
-def save_db(waste_materials: list[WasteMaterialInput]) -> None:
-    """Save a list of new WasteMaterial objects in JSON file"""
-    with open("waste-materials.json", "w") as f:
-        converted_dictionaries = []
-
-        for waste_material in waste_materials:
-            converted_dictionaries.append(waste_material.dict())
-
-        json.dump(converted_dictionaries, f, indent=4)
+class Bin(BinInput, table=True):
+    __tablename__: str = "bins"
+    id: int | None = Field(default=None, primary_key=True)
+    waste_materials: list[WasteMaterial] = Relationship(back_populates="bin")
