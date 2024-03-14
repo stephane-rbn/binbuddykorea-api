@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, HTTPException
 from sqlmodel import Session, SQLModel, create_engine, select
 
-from schemas import WasteMaterial, WasteMaterialInput, load_db
+from schemas import Bin, BinInput, BinOutput, WasteMaterial, WasteMaterialInput
 
 
 @asynccontextmanager
@@ -15,8 +15,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="BinBuddyKorea API", lifespan=lifespan)
-
-db = load_db()
 
 engine = create_engine(
     "sqlite:///binbuddykorea.db",
@@ -54,17 +52,6 @@ def get_waste_material_by_id(
     raise HTTPException(status_code=404, detail=f"No waste material found with id={id}")
 
 
-@app.post("/api/waste-materials", response_model=WasteMaterial)
-def add_waste_material(
-    waste_material_input: WasteMaterialInput, session: Session = Depends(get_session)
-) -> WasteMaterial:
-    new_waste_material = WasteMaterial.model_validate(waste_material_input)
-    session.add(new_waste_material)
-    session.commit()
-    session.refresh(new_waste_material)
-    return new_waste_material
-
-
 @app.delete("/api/waste-materials/{id}", status_code=204)
 def delete_waste_material(id: int, session: Session = Depends(get_session)) -> None:
     waste_material = session.get(WasteMaterial, id)
@@ -91,3 +78,64 @@ def change_waste_material(
         return waste_material
 
     raise HTTPException(status_code=404, detail=f"No waste material with id={id}")
+
+
+@app.get("/api/bins")
+def get_bins(session: Session = Depends(get_session)) -> list:
+    query = select(Bin)
+    return list(session.exec(query).all())
+
+
+@app.get("/api/bins/{id}", response_model=BinOutput)
+def get_bin_by_id(id: int, session: Session = Depends(get_session)) -> Bin:
+    bin = session.get(Bin, id)
+
+    if bin:
+        return bin
+
+    raise HTTPException(status_code=404, detail=f"No bin found with id={id}")
+
+
+@app.put("/api/bins/{id}", response_model=Bin)
+def change_bin(
+    id: int, new_data: BinInput, session: Session = Depends(get_session)
+) -> Bin:
+    bin = session.get(Bin, id)
+
+    if bin:
+        bin.name_en = new_data.name_en
+        bin.name_kr = new_data.name_kr
+        bin.description = new_data.description
+        session.commit()
+        return bin
+
+    raise HTTPException(status_code=404, detail=f"No bin with id={id}")
+
+
+@app.post("/api/bins", response_model=Bin)
+def add_bin(bin_input: BinInput, session: Session = Depends(get_session)) -> Bin:
+    new_bin = Bin.model_validate(bin_input)
+    session.add(new_bin)
+    session.commit()
+    session.refresh(new_bin)
+    return new_bin
+
+
+@app.post("/api/bins/{bin_id}/waste-materials", response_model=Bin)
+def add_waste_material_to_bin(
+    bin_id: int,
+    waste_material_input: WasteMaterialInput,
+    session: Session = Depends(get_session),
+) -> WasteMaterial:
+    bin = session.get(Bin, bin_id)
+
+    if bin:
+        new_waste_material = WasteMaterial.model_validate(
+            waste_material_input, update={"bin_id": bin_id}
+        )
+        bin.waste_materials.append(new_waste_material)
+        session.commit()
+        session.refresh(new_waste_material)
+        return new_waste_material
+
+    raise HTTPException(status_code=404, detail=f"No bin with id={bin_id}")
