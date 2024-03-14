@@ -7,6 +7,8 @@ name = "pypi"
 fastapi = {extras = ["all"], version = "*"}
 sqlmodel = "*"
 alembic = "*"
+python-dotenv = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 ruff = "*"

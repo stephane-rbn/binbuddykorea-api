@@ -1,9 +1,13 @@
+import os
 from contextlib import asynccontextmanager
 
+from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException
 from sqlmodel import Session, SQLModel, create_engine, select
 
 from schemas import Bin, BinInput, BinOutput, WasteMaterial, WasteMaterialInput
+
+load_dotenv()
 
 
 @asynccontextmanager
@@ -16,11 +20,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="BinBuddyKorea API", lifespan=lifespan)
 
-engine = create_engine(
-    "sqlite:///binbuddykorea.db",
-    connect_args={"check_same_thread": False},  # Needed for SQLite
-    echo=True,  # Log generated SQL (to remove)
-)
+URL_DATABASE = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOSTNAME')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+
+engine = create_engine(URL_DATABASE, echo=True)
 
 
 def get_session():
@@ -94,6 +96,17 @@ def get_bin_by_id(id: int, session: Session = Depends(get_session)) -> Bin:
         return bin
 
     raise HTTPException(status_code=404, detail=f"No bin found with id={id}")
+
+
+@app.delete("/api/bins/{id}", status_code=204)
+def delete_bin_by_id(id: int, session: Session = Depends(get_session)) -> None:
+    bin = session.get(Bin, id)
+
+    if bin:
+        session.delete(bin)
+        session.commit()
+    else:
+        raise HTTPException(status_code=404, detail=f"No bin with id={id}")
 
 
 @app.put("/api/bins/{id}", response_model=Bin)
