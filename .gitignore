@@ -164,3 +164,6 @@ cython_debug/
 
 # Ignore SQLite db file
 *.db
+
+# Ignore temporary example-data
+example-data.txt
