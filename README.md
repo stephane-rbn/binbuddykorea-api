@@ -7,13 +7,28 @@
 - Clone project via CLI: `git clone git@github.com:stephane-rbn/binbuddykorea-api.git`
 - Enter project folder: `cd binbuddykorea-api`
 
+> **Note:** This project does not use Docker yet but it will be added in the future. For now, you need to have Python and PostgreSQL installed on your machine.
+
 ### Install dependencies using [Pipenv](https://github.com/pypa/pipenv) and Pipfile
 
 - On macOS, you can install Pipenv via [homebrew](https://brew.sh/): `brew install pipenv`
 - (If python is already globally installed on your machine, you can also run `pip install pipenv` instead)
 - Install project dependencies based on Pipfile: `pipenv install`
 - Activate virtual environment: `pipenv shell` (to deactivate a virtual environment: `exit`)
-- Run the app: `uvicorn main:app --reload`
+
+### Setup PostgreSQL database
+- Install PostgreSQL on your machine (you can use [Postgres.app](https://postgresapp.com/) on macOS)
+- Create a new database that you can "BinBuddyKorea" (you can use [pgAdmin](https://www.pgadmin.org/download/) to create a new database)
+- Create a new `.env` file in the root of the project and add the following environment variables:
+  ```bash
+  DB_USER=postgres # or the user you use to connect to your database
+  DB_PASSWORD=root # or the password you use to connect to your database
+  DB_HOSTNAME=localhost # or the hostname you use to connect to your database
+  DB_PORT=5432 # or the port you use to connect to your database
+  DB_NAME=BinBuddyKorea # or the name of the database you created
+  ```
+- Run the database migrations to build the database schema: `alembic upgrade head`
+- Finally, you can run the project using the following command: `uvicorn main:app --reload`
 
 That's it. You're ready to go! ✅
 
