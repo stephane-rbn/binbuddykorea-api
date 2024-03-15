@@ -32,10 +32,6 @@
 
 That's it. You're ready to go! ✅
 
-If needed, you can also install additional dependencies using pipenv. For example:
-- Install additional dependencies: `pipenv install <package-name>`
-- Install additional development dependencies: `pipenv install --dev <package-name>`
-
 ### API Database Diagram ([link to project](https://dbdiagram.io/d/BinBuddyKorea-API-65ddbb645cd0412774e91ee1))
 
 ![API Database Diagram](db-diagram.png)
