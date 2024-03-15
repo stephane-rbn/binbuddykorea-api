@@ -36,6 +36,7 @@ indent-width = 4
 # Assume Python 3.8
 target-version = "py38"
 
+# Ignore migrations files to hide '"sql" is not a known member of module "sqlmodel"' error messages
 [tool.pyright]
 ignore = ["migrations/versions"]
 
