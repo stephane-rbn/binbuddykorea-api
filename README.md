@@ -11,8 +11,7 @@
 
 ### Install dependencies using [Pipenv](https://github.com/pypa/pipenv) and Pipfile
 
-- On macOS, you can install Pipenv via [homebrew](https://brew.sh/): `brew install pipenv`
-- (If python is already globally installed on your machine, you can also run `pip install pipenv` instead)
+- Install Pipenv via pip: `pip install pipenv` (on macOS, you can install Pipenv via [homebrew](https://brew.sh/): `brew install pipenv`)
 - Install project dependencies based on Pipfile: `pipenv install`
 - Activate virtual environment: `pipenv shell` (to deactivate a virtual environment: `exit`)
 
