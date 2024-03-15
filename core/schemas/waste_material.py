@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlmodel import SQLModel
 
 
@@ -10,3 +12,5 @@ class WasteMaterialInput(SQLModel):
 
 class WasteMaterialOutput(WasteMaterialInput):
     id: int
+    created_at: datetime
+    updated_at: datetime
