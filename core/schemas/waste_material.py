@@ -1,0 +1,12 @@
+from sqlmodel import SQLModel
+
+
+class WasteMaterialInput(SQLModel):
+    name_en: str
+    name_kr: str
+    description: str | None = "Todo"
+    recyclable: bool | None = True
+
+
+class WasteMaterialOutput(WasteMaterialInput):
+    id: int
