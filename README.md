@@ -17,14 +17,14 @@
 
 ### Setup PostgreSQL database
 - Install PostgreSQL on your machine (you can use [Postgres.app](https://postgresapp.com/) on macOS)
-- Create a new database called "BinBuddyKorea" (you can use [pgAdmin](https://www.pgadmin.org/download/) to create a new database)
+- Create a new database called "binbuddykorea-dev" (you can use [pgAdmin](https://www.pgadmin.org/download/) to create a new database)
 - Create a new `.env` file in the root of the project and add the following environment variables:
   ```bash
   DB_USER=postgres # or the user you use to connect to your database
   DB_PASSWORD=root # or the password you use to connect to your database
   DB_HOSTNAME=localhost # or the hostname you use to connect to your database
   DB_PORT=5432 # or the port you use to connect to your database
-  DB_NAME=BinBuddyKorea # or the name of the database you created
+  DB_NAME=binbuddykorea-dev # or the name of the database you created
   ```
 - Run the database migrations to build the database schema: `alembic upgrade head`
 - Finally, you can run the project using the following command: `uvicorn main:app --reload`
