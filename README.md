@@ -18,7 +18,7 @@
 
 ### Setup PostgreSQL database
 - Install PostgreSQL on your machine (you can use [Postgres.app](https://postgresapp.com/) on macOS)
-- Create a new database that you can "BinBuddyKorea" (you can use [pgAdmin](https://www.pgadmin.org/download/) to create a new database)
+- Create a new database called "BinBuddyKorea" (you can use [pgAdmin](https://www.pgadmin.org/download/) to create a new database)
 - Create a new `.env` file in the root of the project and add the following environment variables:
   ```bash
   DB_USER=postgres # or the user you use to connect to your database
