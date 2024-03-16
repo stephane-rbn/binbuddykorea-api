@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from slugify import slugify
 from sqlmodel import Session, select
 
 from config import get_session
@@ -51,7 +52,11 @@ def add_waste_material(
         if not bin:
             raise HTTPException(status_code=404, detail=f"No bin with id={bin_id}")
 
-    new_waste_material = WasteMaterial.model_validate(waste_material_input)
+    slug = slugify(waste_material_input.name_en, max_length=80, word_boundary=True)
+
+    new_waste_material = WasteMaterial.model_validate(
+        waste_material_input, update={"slug": slug}
+    )
 
     if bin_id is not None:
         bin.waste_materials.append(new_waste_material)
@@ -83,12 +88,16 @@ def change_waste_material(
 
     waste_material = session.get(WasteMaterial, id)
 
+    new_slug = slugify(new_data.name_en, max_length=80, word_boundary=True)
+
     if waste_material:
         waste_material.name_en = new_data.name_en
         waste_material.name_kr = new_data.name_kr
         waste_material.description = new_data.description
         waste_material.recyclable = new_data.recyclable
+        waste_material.slug = new_slug
         session.commit()
+        session.refresh(waste_material)
         return waste_material
 
     raise HTTPException(status_code=404, detail=f"No waste material with id={id}")

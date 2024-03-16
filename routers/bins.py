@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from slugify import slugify
 from sqlmodel import Session, select
 
 from config import get_session
@@ -32,7 +33,10 @@ def get_bin_by_id(id: int, session: Session = Depends(get_session)) -> Bin:
 def add_bin(bin_input: BinInput, session: Session = Depends(get_session)) -> Bin:
     """Add a new bin to the database."""
 
-    new_bin = Bin.model_validate(bin_input)
+    slug = slugify(bin_input.name_en, max_length=80, word_boundary=True)
+
+    new_bin = Bin.model_validate(bin_input, update={"slug": slug})
+
     session.add(new_bin)
     session.commit()
     session.refresh(new_bin)
@@ -65,6 +69,7 @@ def change_bin(
         bin.name_kr = new_data.name_kr
         bin.description = new_data.description
         session.commit()
+        session.refresh(bin)
         return bin
 
     raise HTTPException(status_code=404, detail=f"No bin with id={id}")

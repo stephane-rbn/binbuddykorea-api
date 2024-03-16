@@ -9,6 +9,7 @@ from core.schemas.waste_material import WasteMaterialInput
 class WasteMaterial(WasteMaterialInput, table=True):
     __tablename__: str = "waste_materials"
     id: int | None = Field(default=None, primary_key=True)
+    slug: str = Field(nullable=False, unique=True)
     created_at: datetime | None = Field(
         default=None,
         sa_type=sa.DateTime(timezone=True),

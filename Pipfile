@@ -9,6 +9,7 @@ sqlmodel = "*"
 alembic = "*"
 python-dotenv = "*"
 psycopg2-binary = "*"
+python-slugify = "*"
 
 [dev-packages]
 ruff = "*"
