@@ -3,9 +3,7 @@ from sqlmodel import Session, select
 
 from config import get_session
 from core.models.bin import Bin
-from core.models.waste_material import WasteMaterial
 from core.schemas.bin import BinInput, BinOutput
-from core.schemas.waste_material import WasteMaterialInput
 
 router = APIRouter(prefix="/api/v1/bins")
 
@@ -60,23 +58,3 @@ def change_bin(
         return bin
 
     raise HTTPException(status_code=404, detail=f"No bin with id={id}")
-
-
-@router.post("/{bin_id}/waste-materials", response_model=Bin)
-def add_waste_material_to_bin(
-    bin_id: int,
-    waste_material_input: WasteMaterialInput,
-    session: Session = Depends(get_session),
-) -> WasteMaterial:
-    bin = session.get(Bin, bin_id)
-
-    if bin:
-        new_waste_material = WasteMaterial.model_validate(
-            waste_material_input, update={"bin_id": bin_id}
-        )
-        bin.waste_materials.append(new_waste_material)
-        session.commit()
-        session.refresh(new_waste_material)
-        return new_waste_material
-
-    raise HTTPException(status_code=404, detail=f"No bin with id={bin_id}")

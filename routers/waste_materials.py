@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
 from config import get_session
+from core.models.bin import Bin
 from core.models.waste_material import WasteMaterial
 from core.schemas.waste_material import WasteMaterialInput
 
@@ -30,6 +31,27 @@ def get_waste_material_by_id(
         return waste_material
 
     raise HTTPException(status_code=404, detail=f"No waste material found with id={id}")
+
+
+@router.post("/", response_model=WasteMaterial)
+def add_waste_material(
+    waste_material_input: WasteMaterialInput,
+    session: Session = Depends(get_session),
+) -> WasteMaterial:
+    bin_id = waste_material_input.bin_id
+    if bin_id is not None:
+        bin = session.get(Bin, bin_id)
+        if not bin:
+            raise HTTPException(status_code=404, detail=f"No bin with id={bin_id}")
+
+    new_waste_material = WasteMaterial.model_validate(waste_material_input)
+    if bin_id is not None:
+        bin.waste_materials.append(new_waste_material)
+
+    session.add(new_waste_material)
+    session.commit()
+    session.refresh(new_waste_material)
+    return new_waste_material
 
 
 @router.delete("/{id}", status_code=204)
