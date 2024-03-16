@@ -39,12 +39,14 @@ def add_waste_material(
     session: Session = Depends(get_session),
 ) -> WasteMaterial:
     bin_id = waste_material_input.bin_id
+
     if bin_id is not None:
         bin = session.get(Bin, bin_id)
         if not bin:
             raise HTTPException(status_code=404, detail=f"No bin with id={bin_id}")
 
     new_waste_material = WasteMaterial.model_validate(waste_material_input)
+
     if bin_id is not None:
         bin.waste_materials.append(new_waste_material)
 
