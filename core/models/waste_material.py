@@ -21,4 +21,4 @@ class WasteMaterial(WasteMaterialInput, table=True):
         sa_column_kwargs={"onupdate": sa.func.now(), "server_default": sa.func.now()},
     )
     bin_id: int | None = Field(default=None, foreign_key="bins.id")
-    bin: "Bin" = Relationship(back_populates="waste_materials")
+    bin: "Bin" = Relationship(back_populates="waste_materials")  # type: ignore # noqa: F821
