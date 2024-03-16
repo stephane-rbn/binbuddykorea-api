@@ -13,6 +13,8 @@ router = APIRouter(prefix="/api/v1/waste-materials")
 def get_waste_materials(
     recyclable: bool | None = None, session: Session = Depends(get_session)
 ) -> list:
+    """Get all waste materials from the database. Optionally filter by recyclable."""
+
     query = select(WasteMaterial)
 
     if isinstance(recyclable, bool):
@@ -25,6 +27,8 @@ def get_waste_materials(
 def get_waste_material_by_id(
     id: int, session: Session = Depends(get_session)
 ) -> WasteMaterial:
+    """Get a waste material by its id."""
+
     waste_material = session.get(WasteMaterial, id)
 
     if waste_material:
@@ -38,6 +42,8 @@ def add_waste_material(
     waste_material_input: WasteMaterialInput,
     session: Session = Depends(get_session),
 ) -> WasteMaterial:
+    """Add a new waste material to the database. Optionally assign it to a bin."""
+
     bin_id = waste_material_input.bin_id
 
     if bin_id is not None:
@@ -58,6 +64,8 @@ def add_waste_material(
 
 @router.delete("/{id}", status_code=204)
 def delete_waste_material(id: int, session: Session = Depends(get_session)) -> None:
+    """Delete a waste material by its id."""
+
     waste_material = session.get(WasteMaterial, id)
 
     if waste_material:
@@ -71,6 +79,8 @@ def delete_waste_material(id: int, session: Session = Depends(get_session)) -> N
 def change_waste_material(
     id: int, new_data: WasteMaterialInput, session: Session = Depends(get_session)
 ) -> WasteMaterial:
+    """Update a waste material by its id."""
+
     waste_material = session.get(WasteMaterial, id)
 
     if waste_material:
