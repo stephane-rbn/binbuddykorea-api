@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 from config import get_session
 from core.models.bin import Bin
 from core.models.waste_material import WasteMaterial
-from core.schemas.waste_material import WasteMaterialInput
+from core.schemas.waste_material import WasteMaterialInput, WasteMaterialOutput
 
 router = APIRouter(prefix="/api/v1/waste-materials")
 
@@ -24,7 +24,7 @@ def get_waste_materials(
     return list(session.exec(query).all())
 
 
-@router.get("/{id}", response_model=WasteMaterial)
+@router.get("/{id}", response_model=WasteMaterialOutput)
 def get_waste_material_by_id(
     id: int, session: Session = Depends(get_session)
 ) -> WasteMaterial:
