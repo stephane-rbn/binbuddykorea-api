@@ -5,11 +5,17 @@ from sqlmodel import Field, Relationship
 
 from core.models.waste_material import WasteMaterial
 from core.schemas.bin import BinInput
+from core.utils.custom_utils import CustomUtils
 
 
 class Bin(BinInput, table=True):
     __tablename__: str = "bins"
     id: int | None = Field(default=None, primary_key=True)
+    uuid: str = Field(
+        default=CustomUtils.generate_uuid("bin_"),
+        nullable=False,
+        unique=True,
+    )
     slug: str = Field(nullable=False, unique=True)
     created_at: datetime | None = Field(
         default=None,
