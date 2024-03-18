@@ -4,17 +4,11 @@ import sqlalchemy as sa
 from sqlmodel import Field, Relationship
 
 from core.schemas.waste_material import WasteMaterialInput
-from core.utils.custom_utils import CustomUtils
 
 
 class WasteMaterial(WasteMaterialInput, table=True):
     __tablename__: str = "waste_materials"
     id: int | None = Field(default=None, primary_key=True)
-    uuid: str = Field(
-        default=CustomUtils.generate_uuid("wm_"),
-        nullable=False,
-        unique=True,
-    )
     slug: str = Field(nullable=False, unique=True)
     created_at: datetime | None = Field(
         default=None,
