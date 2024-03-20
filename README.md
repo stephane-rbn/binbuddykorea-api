@@ -11,7 +11,7 @@
 
 ### Install dependencies using [Pipenv](https://github.com/pypa/pipenv) and Pipfile
 
-> Pipenv is required to install project dependencies with the Pipfile. However, you can install and use your own Python's interpreter and run `pipenv install --deploy --system` to install dependencies only without creating a virtual environment with Pipenv.
+> Pipenv is required to install project dependencies based on the Pipfile. However, you can install and use your own Python's interpreter and run `pipenv install --deploy --system` to install dependencies only without creating a virtual environment with Pipenv.
 
 - Install Pipenv via pip: `pip install pipenv` (on macOS, you can install Pipenv via [homebrew](https://brew.sh/): `brew install pipenv`)
 - Install project dependencies based on Pipfile: `pipenv install`
