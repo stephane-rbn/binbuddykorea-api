@@ -15,12 +15,16 @@ def search_waste_materials_by_name_and_description(
 ) -> list[WasteMaterialSearchResult]:
     """Search waste materials by name and description."""
 
-    statement = select(WasteMaterial).where(
-        or_(
-            func.lower(col(WasteMaterial.name_en)).contains(q.lower()),
-            (col(WasteMaterial.name_kr).contains(q)),
-            func.lower(col(WasteMaterial.description)).contains(q.lower()),
+    statement = (
+        select(WasteMaterial)
+        .where(
+            or_(
+                func.lower(col(WasteMaterial.name_en)).contains(q.lower()),
+                (col(WasteMaterial.name_kr).contains(q)),
+                func.lower(col(WasteMaterial.description)).contains(q.lower()),
+            )
         )
+        .limit(5)
     )
 
     results = session.exec(statement).all()
