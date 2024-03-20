@@ -15,3 +15,9 @@ class WasteMaterialOutput(WasteMaterialInput):
     id: int
     created_at: datetime
     updated_at: datetime
+
+
+class WasteMaterialSearchResult(SQLModel):
+    name_en: str
+    name_kr: str
+    description: str | None
