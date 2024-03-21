@@ -10,12 +10,12 @@ router = APIRouter(prefix="/api/v1/search")
 
 @router.get("/", response_model=list[WasteMaterialSearchResult])
 def search_waste_materials(
-    q: str | None = Query(..., min_length=1, description="Search waste material"),
+    q: str = Query(None, description="Search waste material"),
     session: Session = Depends(get_session),
 ) -> list[WasteMaterialSearchResult]:
     """Search waste materials"""
 
-    if q is None:
+    if q is None or q == "":
         return []
 
     return SearchUtils.find_waste_materials_by_name_and_description(q, 5, session)
