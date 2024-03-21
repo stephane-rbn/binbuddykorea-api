@@ -1,5 +1,3 @@
-# core/search_utils.py
-
 from sqlmodel import Session, col, func, or_, select
 
 from core.models.waste_material import WasteMaterial
