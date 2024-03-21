@@ -27,6 +27,8 @@
   DB_HOSTNAME=localhost # or the hostname you use to connect to your database
   DB_PORT=5432 # or the port you use to connect to your database
   DB_NAME=binbuddykorea-dev # or the name of the database you created
+  DISPLAY_SQL_LOGS=true # or false to disable SQL logs like in production
+  ENV_TEST=true # or false to disable actions only available in development
   ```
 - Run the database migrations to build the database schema: `alembic upgrade head`
 - Finally, you can run the project using the following command: `uvicorn main:app --reload`
