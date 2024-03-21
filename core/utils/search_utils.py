@@ -8,10 +8,10 @@ from core.schemas.waste_material import WasteMaterialSearchResult
 
 class SearchUtils:
     @staticmethod
-    def search_waste_materials_by_name_and_description(
+    def find_waste_materials_by_name_and_description(
         q: str, limit: int, session: Session
     ) -> list[WasteMaterialSearchResult]:
-        """Search waste materials by name and description in database"""
+        """Find waste materials by name and description in database"""
 
         statement = (
             select(WasteMaterial)

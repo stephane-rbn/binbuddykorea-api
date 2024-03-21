@@ -18,4 +18,4 @@ def search_waste_materials(
     if q is None:
         return []
 
-    return SearchUtils.search_waste_materials_by_name_and_description(q, 5, session)
+    return SearchUtils.find_waste_materials_by_name_and_description(q, 5, session)
