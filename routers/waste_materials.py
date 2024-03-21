@@ -88,14 +88,14 @@ def change_waste_material(
 
     waste_material = session.get(WasteMaterial, id)
 
-    new_slug = slugify(new_data.name_en, max_length=80, word_boundary=True)
-
     if waste_material:
         waste_material.name_en = new_data.name_en
         waste_material.name_kr = new_data.name_kr
         waste_material.description = new_data.description
         waste_material.recyclable = new_data.recyclable
-        waste_material.slug = new_slug
+        waste_material.slug = slugify(
+            new_data.name_en, max_length=80, word_boundary=True
+        )
         session.commit()
         session.refresh(waste_material)
         return waste_material
