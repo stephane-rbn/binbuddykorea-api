@@ -24,7 +24,7 @@ class SearchUtils:
         )
 
         results = session.exec(statement).all()
-        suggestions = []
+        suggestions: list[WasteMaterialSearchResult] = []
 
         for result in results:
             suggestions.append(
