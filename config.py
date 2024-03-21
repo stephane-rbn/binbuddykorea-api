@@ -7,7 +7,10 @@ load_dotenv()
 
 DATABASE_URL = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOSTNAME')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
 
-engine = create_engine(DATABASE_URL, echo=eval(os.getenv("DISPLAY_SQL_LOGS")))  # type: ignore  # noqa: S307
+engine = create_engine(
+    DATABASE_URL,
+    echo=eval(os.getenv("DISPLAY_SQL_LOGS").lower().capitalize()),  # type: ignore  # noqa: S307
+)
 
 
 def get_session():
