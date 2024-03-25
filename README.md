@@ -42,4 +42,4 @@ That's it. You're ready to go! ✅
 
 ### Code conventions
 
-- Use [ruff](https://github.com/astral-sh/ruff) for code linting and formatting.
+- Use [ruff](https://github.com/astral-sh/ruff) for code linting and formatting
