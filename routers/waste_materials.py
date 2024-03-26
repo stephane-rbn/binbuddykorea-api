@@ -14,12 +14,14 @@ router = APIRouter(prefix="/api/v1/waste-materials")
 def get_waste_materials(
     recyclable: bool | None = None, session: Session = Depends(get_session)
 ) -> list:
-    """Get all waste materials from the database. Optionally filter by recyclable."""
+    """Get all waste materials from the database with limit of 25. Optionally filter by recyclable."""
 
-    query = select(WasteMaterial)
+    limit = 25
+
+    query = select(WasteMaterial).limit(limit)
 
     if isinstance(recyclable, bool):
-        query = query.where(WasteMaterial.recyclable == recyclable)
+        query = query.where(WasteMaterial.recyclable == recyclable).limit(limit)
 
     return list(session.exec(query).all())
 
