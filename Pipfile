@@ -10,10 +10,10 @@ alembic = "*"
 python-dotenv = "*"
 psycopg2-binary = "*"
 python-slugify = "*"
+faker = "*"
 
 [dev-packages]
 ruff = "*"
-faker = "*"
 
 [requires]
 python_version = "3.12"
