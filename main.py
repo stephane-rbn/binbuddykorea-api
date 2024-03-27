@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from sqlmodel import SQLModel
 
 from config import engine
-from routers import bins, search, waste_materials
+from routers import bins, search, views, waste_materials
 
 
 @asynccontextmanager
@@ -19,3 +19,4 @@ app = FastAPI(title="BinBuddyKorea API", lifespan=lifespan)
 app.include_router(bins.router, tags=["Bins"])
 app.include_router(waste_materials.router, tags=["Waste Materials"])
 app.include_router(search.router, tags=["Search"])
+app.include_router(views.router)
