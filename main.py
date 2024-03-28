@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from sqlmodel import SQLModel
 
 from config import engine
@@ -16,6 +17,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="BinBuddyKorea API", lifespan=lifespan)
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 app.include_router(bins.router, tags=["Bins"])
 app.include_router(waste_materials.router, tags=["Waste Materials"])
 app.include_router(search.router, tags=["Search"])
