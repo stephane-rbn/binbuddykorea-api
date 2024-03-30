@@ -31,7 +31,7 @@
   DISPLAY_SQL_LOGS=true # or false to disable SQL logs like in production environment
   ENV_TEST=true # or false to disable actions only available in development environment
   ```
-- Run the database migrations to build the database schema: `alembic upgrade head`
+- Run the database migrations to build the database schema: `alembic upgrade head` (to do after each change in the database schema and after pulling changes from the repository)
 - Optional: run `python seeds.py` to seed the database with initial data (only available in development environment)
 - Finally, you can run the project using the following command: `uvicorn main:app --reload`
 
