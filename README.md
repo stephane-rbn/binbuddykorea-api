@@ -44,4 +44,4 @@ That's it. You're ready to go! ✅
 ### Code conventions
 
 - Use [ruff](https://github.com/astral-sh/ruff) for code linting and formatting
-- Optional: use a *static type checker* for Python like Microsoft's [Pyright](https://github.com/microsoft/pyright) (Visual Studio Code users are recommended to use [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), an extension made by Microsoft and powered by Pyright. Others might be looking at this [installation guide](https://github.com/microsoft/pyright/blob/main/docs/installation.md))
+- Optional: use a *static type checker* for Python like Microsoft's [Pyright](https://github.com/microsoft/pyright) (Visual Studio Code users are recommended to use [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), an extension made by Microsoft and powered by Pyright. For others, feel free to look at this [installation guide](https://github.com/microsoft/pyright/blob/main/docs/installation.md))
