@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from slugify import slugify
 from sqlmodel import Session, select
 
@@ -6,11 +6,14 @@ from config import get_session
 from core.models.bin import Bin
 from core.schemas.bin import BinInput, BinOutput
 
+from .limiter import limiter
+
 router = APIRouter(prefix="/api/v1/bins")
 
 
 @router.get("/")
-def get_bins(session: Session = Depends(get_session)) -> list:
+@limiter.limit("1/second")
+def get_bins(request: Request, session: Session = Depends(get_session)) -> list:
     """Get all bins from the database."""
 
     query = select(Bin)
@@ -18,7 +21,10 @@ def get_bins(session: Session = Depends(get_session)) -> list:
 
 
 @router.get("/{id}", response_model=BinOutput)
-def get_bin_by_id(id: int, session: Session = Depends(get_session)) -> Bin:
+@limiter.limit("1/second")
+def get_bin_by_id(
+    request: Request, id: int, session: Session = Depends(get_session)
+) -> Bin:
     """Get a bin by its id."""
 
     bin = session.get(Bin, id)
@@ -30,7 +36,10 @@ def get_bin_by_id(id: int, session: Session = Depends(get_session)) -> Bin:
 
 
 @router.post("/", response_model=Bin)
-def add_bin(bin_input: BinInput, session: Session = Depends(get_session)) -> Bin:
+@limiter.limit("1/second")
+def add_bin(
+    request: Request, bin_input: BinInput, session: Session = Depends(get_session)
+) -> Bin:
     """Add a new bin to the database."""
 
     slug = slugify(bin_input.name_en, max_length=80, word_boundary=True)
@@ -44,7 +53,10 @@ def add_bin(bin_input: BinInput, session: Session = Depends(get_session)) -> Bin
 
 
 @router.delete("/{id}", status_code=204)
-def delete_bin_by_id(id: int, session: Session = Depends(get_session)) -> None:
+@limiter.limit("1/second")
+def delete_bin_by_id(
+    request: Request, id: int, session: Session = Depends(get_session)
+) -> None:
     """Delete a bin by its id."""
 
     bin = session.get(Bin, id)
@@ -57,8 +69,12 @@ def delete_bin_by_id(id: int, session: Session = Depends(get_session)) -> None:
 
 
 @router.put("/{id}", response_model=Bin)
+@limiter.limit("1/second")
 def change_bin(
-    id: int, new_data: BinInput, session: Session = Depends(get_session)
+    request: Request,
+    id: int,
+    new_data: BinInput,
+    session: Session = Depends(get_session),
 ) -> Bin:
     """Update a bin by its id."""
 

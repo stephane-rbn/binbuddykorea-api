@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from slugify import slugify
 from sqlmodel import Session, select
 
@@ -7,12 +7,17 @@ from core.models.bin import Bin
 from core.models.waste_material import WasteMaterial
 from core.schemas.waste_material import WasteMaterialInput, WasteMaterialOutput
 
+from .limiter import limiter
+
 router = APIRouter(prefix="/api/v1/waste-materials")
 
 
 @router.get("/")
+@limiter.limit("1/second")
 def get_waste_materials(
-    recyclable: bool | None = None, session: Session = Depends(get_session)
+    request: Request,
+    recyclable: bool | None = None,
+    session: Session = Depends(get_session),
 ) -> list:
     """Get all waste materials from the database with limit of 25. Optionally filter by recyclable."""
 
@@ -27,8 +32,9 @@ def get_waste_materials(
 
 
 @router.get("/{id}", response_model=WasteMaterialOutput)
+@limiter.limit("1/second")
 def get_waste_material_by_id(
-    id: int, session: Session = Depends(get_session)
+    request: Request, id: int, session: Session = Depends(get_session)
 ) -> WasteMaterial:
     """Get a waste material by its id."""
 
@@ -41,7 +47,9 @@ def get_waste_material_by_id(
 
 
 @router.post("/", response_model=WasteMaterial)
+@limiter.limit("1/second")
 def add_waste_material(
+    request: Request,
     waste_material_input: WasteMaterialInput,
     session: Session = Depends(get_session),
 ) -> WasteMaterial:
@@ -70,7 +78,10 @@ def add_waste_material(
 
 
 @router.delete("/{id}", status_code=204)
-def delete_waste_material(id: int, session: Session = Depends(get_session)) -> None:
+@limiter.limit("1/second")
+def delete_waste_material(
+    request: Request, id: int, session: Session = Depends(get_session)
+) -> None:
     """Delete a waste material by its id."""
 
     waste_material = session.get(WasteMaterial, id)
@@ -83,8 +94,12 @@ def delete_waste_material(id: int, session: Session = Depends(get_session)) -> N
 
 
 @router.put("/{id}", response_model=WasteMaterial)
+@limiter.limit("1/second")
 def change_waste_material(
-    id: int, new_data: WasteMaterialInput, session: Session = Depends(get_session)
+    request: Request,
+    id: int,
+    new_data: WasteMaterialInput,
+    session: Session = Depends(get_session),
 ) -> WasteMaterial:
     """Update a waste material by its id."""
 
