@@ -12,6 +12,7 @@ psycopg2-binary = "*"
 python-slugify = "*"
 faker = "*"
 uvloop = {version = "*", markers = "sys_platform != 'win32'"}
+slowapi = "*"
 
 [dev-packages]
 ruff = "*"
