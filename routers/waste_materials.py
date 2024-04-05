@@ -32,7 +32,7 @@ def get_waste_materials(
 
 
 @router.get("/{id}", response_model=WasteMaterialOutput)
-@limiter.limit("1/second")
+@limiter.limit("10/second")
 def get_waste_material_by_id(
     request: Request, id: int, session: Session = Depends(get_session)
 ) -> WasteMaterial:

@@ -21,7 +21,7 @@ def get_bins(request: Request, session: Session = Depends(get_session)) -> list:
 
 
 @router.get("/{id}", response_model=BinOutput)
-@limiter.limit("1/second")
+@limiter.limit("10/second")
 def get_bin_by_id(
     request: Request, id: int, session: Session = Depends(get_session)
 ) -> Bin:
