@@ -4,8 +4,8 @@
 
 ## Project setup
 
-- Clone project via CLI: `git clone git@github.com:stephane-rbn/binbuddykorea-api.git`
-- Enter project folder: `cd binbuddykorea-api`
+- Clone project via CLI: `git clone git@github.com:stephane-rbn/binbuddykorea-api.git`.
+- Enter project folder: `cd binbuddykorea-api`.
 
 > **Note:** This project does not use Docker yet but it will be added in the future. For now, you need to have Python and PostgreSQL installed on your machine.
 
@@ -13,14 +13,14 @@
 
 > Pipenv is required to install project dependencies based on the Pipfile. However, you can install and use your own Python's interpreter and run `pipenv install --deploy --system` to install dependencies only without creating a virtual environment with Pipenv (you still may need to create one manually with [virtualenv](https://virtualenv.pypa.io/en/latest/) or [venv](https://docs.python.org/3/library/venv.html)).
 
-- Install pip on your machine (on Windows, you might need to install the exact version of Python that is used in the project: [Python 3.12.2](https://www.python.org/downloads/release/python-3122/))
-- Install Pipenv via pip: `pip install pipenv` (on macOS, you can install Pipenv via [homebrew](https://brew.sh/): `brew install pipenv`)
-- Install project dependencies based on Pipfile: `pipenv install`
-- Activate the virtual environment: `pipenv shell` (to deactivate a virtual environment: `exit`)
+- Install pip on your machine (on Windows, you might need to install the exact version of Python that is used in the project: [Python 3.12.2](https://www.python.org/downloads/release/python-3122/)).
+- Install Pipenv via pip: `pip install pipenv` (on macOS, you can install Pipenv via [homebrew](https://brew.sh/): `brew install pipenv`).
+- Install project dependencies based on Pipfile: `pipenv install`.
+- Activate the virtual environment: `pipenv shell` (to deactivate a virtual environment: `exit`).
 
 ### Setup PostgreSQL database
-- Install PostgreSQL 16 on your machine (you can use [Postgres.app](https://postgresapp.com/) on macOS and [EDB installer](https://www.postgresql.org/download/windows/) on Windows)
-- Create a new database called "binbuddykorea-dev" (you can use [pgAdmin](https://www.pgadmin.org/download/) to create a new database)
+- Install PostgreSQL 16 on your machine (you can use [Postgres.app](https://postgresapp.com/) on macOS and [EDB installer](https://www.postgresql.org/download/windows/) on Windows).
+- Create a new database called "binbuddykorea-dev" (you can use [pgAdmin](https://www.pgadmin.org/download/) to create a new database).
 - Create a new `.env` file in the root of the project and add the following environment variables:
   ```bash
   DB_USER=postgres # or the user you use to connect to your database
@@ -31,9 +31,9 @@
   DISPLAY_SQL_LOGS=true # or false to disable SQL logs like in production environment
   ENV_TEST=true # or false to disable actions only available in development environment
   ```
-- Run the database migrations to build the database schema: `alembic upgrade head` (to do after each change in the database schema and after pulling changes from the repository)
-- Optional: run `python seeds.py` to seed the database with initial data (only available in development environment)
-- Finally, you can run the project using the following command: `uvicorn main:app --reload`
+- Run the database migrations to build the database schema: `alembic upgrade head` (to do after each change in the database schema and after pulling changes from the repository).
+- Optional: run `python seeds.py` to seed the database with initial data (only available in development environment).
+- Finally, you can run the project using the following command: `uvicorn main:app --reload`.
 
 That's it. You're ready to go! ✅
 
@@ -43,5 +43,5 @@ That's it. You're ready to go! ✅
 
 ### Code conventions
 
-- Use [ruff](https://github.com/astral-sh/ruff) for code linting and formatting
-- Optional: use a *static type checker* for Python like Microsoft's [Pyright](https://github.com/microsoft/pyright) (Visual Studio Code users are recommended to use [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), an extension made by Microsoft and powered by Pyright. For others, feel free to look at this [installation guide](https://github.com/microsoft/pyright/blob/main/docs/installation.md))
+- Use [ruff](https://github.com/astral-sh/ruff) for code linting and formatting.
+- Optional: use a *static type checker* for Python like Microsoft's [Pyright](https://github.com/microsoft/pyright). Visual Studio Code users are recommended to use [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), an extension made by Microsoft and powered by Pyright. For others, feel free to look at this [installation guide](https://github.com/microsoft/pyright/blob/main/docs/installation.md).
