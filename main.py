@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -31,3 +31,10 @@ app.include_router(bins.router, tags=["Bins"])
 app.include_router(waste_materials.router, tags=["Waste Materials"])
 app.include_router(search.router, tags=["Search"])
 app.include_router(views.router, tags=["Templates"])
+
+
+@app.middleware("http")
+async def add_bins_cookie(request: Request, call_next):
+    response = await call_next(request)
+    response.set_cookie(key="bins_cookie", value="you_visited_binbuddykorea_app")
+    return response

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Cookie, Depends, Query, Request
 from sqlmodel import Session
 
 from config import get_session
@@ -16,8 +16,11 @@ def search_waste_materials(
     request: Request,
     q: str = Query(None, description="Search waste material"),
     session: Session = Depends(get_session),
+    bins_cookie: str | None = Cookie(None),
 ) -> list[WasteMaterialSearchResult]:
     """Search waste materials"""
+
+    print(bins_cookie)
 
     if q is None or q == "":
         return []
