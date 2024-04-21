@@ -1,3 +1,5 @@
+![Bin Buddy Korea Logo](logo-green-long.png)
+
 # binbuddykorea-api
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Python 3.12.2](https://img.shields.io/badge/python-3.12.2-blue.svg)](https://www.python.org/downloads/release/python-312/)
