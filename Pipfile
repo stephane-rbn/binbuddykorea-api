@@ -13,7 +13,7 @@ python-slugify = "*"
 faker = "*"
 uvloop = {version = "*", markers = "sys_platform != 'win32'"}
 slowapi = "*"
-passlib = {extras = ["bcrypt"], version = "*"}
+bcrypt = "*"
 
 [dev-packages]
 ruff = "*"

@@ -1,7 +1,5 @@
-from passlib.context import CryptContext
+import bcrypt
 from sqlmodel import Field, SQLModel
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class User(SQLModel, table=True):
@@ -10,8 +8,16 @@ class User(SQLModel, table=True):
     username: str = Field(unique=True, index=True)
     password_hash: str = ""
 
-    def set_password(self, password: str) -> None:
-        self.password_hash = pwd_context.hash(password)
+    def hash_password(self, password: str) -> str:
+        password_bytes = password.encode("utf-8")
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(password=password_bytes, salt=salt)
+        return hashed_password.decode("utf-8")
+
+    def set_password(self, password) -> None:
+        self.password_hash = self.hash_password(password)
 
     def verify_password(self, password: str) -> bool:
-        return pwd_context.verify(password, self.password_hash)
+        return bcrypt.checkpw(
+            password.encode("utf-8"), self.password_hash.encode("utf-8")
+        )
