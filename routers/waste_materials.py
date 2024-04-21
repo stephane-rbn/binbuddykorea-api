@@ -4,8 +4,10 @@ from sqlmodel import Session, select
 
 from config import get_session
 from core.models.bin import Bin
+from core.models.user import User
 from core.models.waste_material import WasteMaterial
 from core.schemas.waste_material import WasteMaterialInput, WasteMaterialOutput
+from routers.auth import get_current_user
 
 from .limiter import limiter
 
@@ -18,6 +20,7 @@ def get_waste_materials(
     request: Request,
     recyclable: bool | None = None,
     session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
 ) -> list:
     """Get all waste materials from the database with limit of 25. Optionally filter by recyclable."""
 
@@ -34,7 +37,10 @@ def get_waste_materials(
 @router.get("/{id}", response_model=WasteMaterialOutput)
 @limiter.limit("10/second")
 def get_waste_material_by_id(
-    request: Request, id: int, session: Session = Depends(get_session)
+    request: Request,
+    id: int,
+    session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
 ) -> WasteMaterial:
     """Get a waste material by its id."""
 
@@ -52,6 +58,7 @@ def add_waste_material(
     request: Request,
     waste_material_input: WasteMaterialInput,
     session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
 ) -> WasteMaterial:
     """Add a new waste material to the database. Optionally assign it to a bin."""
 
@@ -80,7 +87,10 @@ def add_waste_material(
 @router.delete("/{id}", status_code=204)
 @limiter.limit("1/second")
 def delete_waste_material(
-    request: Request, id: int, session: Session = Depends(get_session)
+    request: Request,
+    id: int,
+    session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
 ) -> None:
     """Delete a waste material by its id."""
 
@@ -100,6 +110,7 @@ def change_waste_material(
     id: int,
     new_data: WasteMaterialInput,
     session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
 ) -> WasteMaterial:
     """Update a waste material by its id."""
 

@@ -4,7 +4,9 @@ from sqlmodel import Session, select
 
 from config import get_session
 from core.models.bin import Bin
+from core.models.user import User
 from core.schemas.bin import BinInput, BinOutput
+from routers.auth import get_current_user
 
 from .limiter import limiter
 
@@ -13,7 +15,11 @@ router = APIRouter(prefix="/api/v1/bins")
 
 @router.get("/")
 @limiter.limit("1/second")
-def get_bins(request: Request, session: Session = Depends(get_session)) -> list:
+def get_bins(
+    request: Request,
+    session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> list:
     """Get all bins from the database."""
 
     query = select(Bin)
@@ -23,7 +29,10 @@ def get_bins(request: Request, session: Session = Depends(get_session)) -> list:
 @router.get("/{id}", response_model=BinOutput)
 @limiter.limit("10/second")
 def get_bin_by_id(
-    request: Request, id: int, session: Session = Depends(get_session)
+    request: Request,
+    id: int,
+    session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
 ) -> Bin:
     """Get a bin by its id."""
 
@@ -38,7 +47,10 @@ def get_bin_by_id(
 @router.post("/", response_model=Bin)
 @limiter.limit("1/second")
 def add_bin(
-    request: Request, bin_input: BinInput, session: Session = Depends(get_session)
+    request: Request,
+    bin_input: BinInput,
+    session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
 ) -> Bin:
     """Add a new bin to the database."""
 
@@ -55,7 +67,10 @@ def add_bin(
 @router.delete("/{id}", status_code=204)
 @limiter.limit("1/second")
 def delete_bin_by_id(
-    request: Request, id: int, session: Session = Depends(get_session)
+    request: Request,
+    id: int,
+    session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
 ) -> None:
     """Delete a bin by its id."""
 
@@ -75,6 +90,7 @@ def change_bin(
     id: int,
     new_data: BinInput,
     session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
 ) -> Bin:
     """Update a bin by its id."""
 
