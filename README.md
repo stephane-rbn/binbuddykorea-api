@@ -1,8 +1,22 @@
-![Bin Buddy Korea Logo](logo-green-long.png)
+<h1 align="center">
+  <div>
+    <a href="https://binbuddykorea.com">
+      <img src="logo-green-long.png" alt="Bin Buddy Korea Logo" height="120"/><br>
+    </a>
+    Bin Buddy Korea<br>
+  </div>
+</h1>
 
-# binbuddykorea-api
+<p align="center">
+Recycling in South Korea has now become easy.
+</p>
+
+<div align="center">
+
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Python 3.12.2](https://img.shields.io/badge/python-3.12.2-blue.svg)](https://www.python.org/downloads/release/python-312/)
+
+</div>
 
 ## Project setup
 
