@@ -1,14 +1,19 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.docs import get_redoc_html, get_swagger_ui_html
+from fastapi.openapi.utils import get_openapi
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from sqlmodel import SQLModel
 
 from config import engine
+from core.models.user import User
 from routers import bins, search, views, waste_materials
+from routers.auth import get_current_user
 from routers.limiter import limiter
 
 
@@ -20,7 +25,13 @@ async def lifespan(app: FastAPI):
     # shutdown logic
 
 
-app = FastAPI(title="BinBuddyKorea API", lifespan=lifespan)
+app = FastAPI(
+    title="BinBuddyKorea API",
+    lifespan=lifespan,
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None,
+)
 
 app.state.limiter = limiter
 
@@ -49,3 +60,20 @@ async def add_bins_cookie(request: Request, call_next):
     response = await call_next(request)
     response.set_cookie(key="bins_cookie", value="you_visited_binbuddykorea_app")
     return response
+
+
+@app.get("/docs", include_in_schema=False)
+def get_swagger_ui_documentation(
+    user: User = Depends(get_current_user),
+) -> HTMLResponse:
+    return get_swagger_ui_html(openapi_url="/openapi.json", title="docs")
+
+
+@app.get("/redoc", include_in_schema=False)
+def get_redoc_documentation(user: User = Depends(get_current_user)) -> HTMLResponse:
+    return get_redoc_html(openapi_url="/openapi.json", title="docs")
+
+
+@app.get("/openapi.json", include_in_schema=False)
+def openapi(user: User = Depends(get_current_user)):
+    return get_openapi(title="FastAPI", version="0.1.0", routes=app.routes)
