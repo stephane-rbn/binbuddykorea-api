@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from slugify import slugify
 from sqlmodel import Session, select
 
@@ -41,7 +41,10 @@ def get_bin_by_id(
     if bin:
         return bin
 
-    raise HTTPException(status_code=404, detail=f"No bin found with id={id}")
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"No bin found with id={id}",
+    )
 
 
 @router.post("/", response_model=Bin)
@@ -64,7 +67,7 @@ def add_bin(
     return new_bin
 
 
-@router.delete("/{id}", status_code=204)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 @limiter.limit("1/second")
 def delete_bin_by_id(
     request: Request,
@@ -80,7 +83,9 @@ def delete_bin_by_id(
         session.delete(bin)
         session.commit()
     else:
-        raise HTTPException(status_code=404, detail=f"No bin with id={id}")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"No bin with id={id}"
+        )
 
 
 @router.put("/{id}", response_model=Bin)
@@ -104,4 +109,6 @@ def change_bin(
         session.refresh(bin)
         return bin
 
-    raise HTTPException(status_code=404, detail=f"No bin with id={id}")
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND, detail=f"No bin with id={id}"
+    )

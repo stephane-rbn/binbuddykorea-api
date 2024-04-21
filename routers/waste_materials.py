@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from slugify import slugify
 from sqlmodel import Session, select
 
@@ -49,7 +49,10 @@ def get_waste_material_by_id(
     if waste_material:
         return waste_material
 
-    raise HTTPException(status_code=404, detail=f"No waste material found with id={id}")
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"No waste material found with id={id}",
+    )
 
 
 @router.post("/", response_model=WasteMaterial)
@@ -67,7 +70,9 @@ def add_waste_material(
     if bin_id is not None:
         bin = session.get(Bin, bin_id)
         if not bin:
-            raise HTTPException(status_code=404, detail=f"No bin with id={bin_id}")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail=f"No bin with id={bin_id}"
+            )
 
     slug = slugify(waste_material_input.name_en, max_length=80, word_boundary=True)
 
@@ -84,7 +89,7 @@ def add_waste_material(
     return new_waste_material
 
 
-@router.delete("/{id}", status_code=204)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 @limiter.limit("1/second")
 def delete_waste_material(
     request: Request,
@@ -100,7 +105,10 @@ def delete_waste_material(
         session.delete(waste_material)
         session.commit()
     else:
-        raise HTTPException(status_code=404, detail=f"No waste material with id={id}")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No waste material with id={id}",
+        )
 
 
 @router.put("/{id}", response_model=WasteMaterial)
@@ -128,4 +136,6 @@ def change_waste_material(
         session.refresh(waste_material)
         return waste_material
 
-    raise HTTPException(status_code=404, detail=f"No waste material with id={id}")
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND, detail=f"No waste material with id={id}"
+    )
