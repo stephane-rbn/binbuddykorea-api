@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
-from slugify import slugify
 from sqlmodel import Session, select
 
 from config import get_session
 from core.models.bin import Bin
 from core.models.user import User
 from core.schemas.bin import BinInput, BinOutput
+from core.utils.slug_utils import SlugUtils
 from routers.auth import get_current_user
 
 from .limiter import limiter
@@ -57,7 +57,7 @@ def add_bin(
 ) -> Bin:
     """Add a new bin to the database."""
 
-    slug = slugify(bin_input.name_en, max_length=80, word_boundary=True)
+    slug = SlugUtils.generate_slug(bin_input.name_en)
 
     new_bin = Bin.model_validate(bin_input, update={"slug": slug})
 

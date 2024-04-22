@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
-from slugify import slugify
 from sqlmodel import Session, select
 
 from config import get_session
@@ -7,6 +6,7 @@ from core.models.bin import Bin
 from core.models.user import User
 from core.models.waste_material import WasteMaterial
 from core.schemas.waste_material import WasteMaterialInput, WasteMaterialOutput
+from core.utils.slug_utils import SlugUtils
 from routers.auth import get_current_user
 
 from .limiter import limiter
@@ -74,7 +74,7 @@ def add_waste_material(
                 status_code=status.HTTP_404_NOT_FOUND, detail=f"No bin with id={bin_id}"
             )
 
-    slug = slugify(waste_material_input.name_en, max_length=80, word_boundary=True)
+    slug = SlugUtils.generate_slug(waste_material_input.name_en)
 
     new_waste_material = WasteMaterial.model_validate(
         waste_material_input, update={"slug": slug}
@@ -129,9 +129,7 @@ def change_waste_material(
         waste_material.name_kr = new_data.name_kr
         waste_material.description = new_data.description
         waste_material.recyclable = new_data.recyclable
-        waste_material.slug = slugify(
-            new_data.name_en, max_length=80, word_boundary=True
-        )
+        waste_material.slug = SlugUtils.generate_slug(new_data.name_en)
         session.commit()
         session.refresh(waste_material)
         return waste_material
