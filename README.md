@@ -37,6 +37,7 @@ Recycling in South Korea has now become easy.
 ### Setup PostgreSQL database
 - Install PostgreSQL 16 on your machine (you can use [Postgres.app](https://postgresapp.com/) on macOS and [EDB installer](https://www.postgresql.org/download/windows/) on Windows).
 - Create a new database called "binbuddykorea-dev" (you can use [pgAdmin](https://www.pgadmin.org/download/) to create a new database).
+- Create a user by running the following command: `python create_user.py`. You will be asked to enter a username and a password for the user you want to create. This user will be used for Basic Authentication in the development environment.
 - Create a new `.env` file in the root of the project and add the following environment variables:
   ```bash
   DB_USER=postgres # or the user you use to connect to your database
@@ -44,6 +45,8 @@ Recycling in South Korea has now become easy.
   DB_HOSTNAME=localhost # or the hostname you use to connect to your database
   DB_PORT=5432 # or the port you use to connect to your database
   DB_NAME=binbuddykorea-dev # or the name of the database you created
+  BASIC_AUTH_TEST_USERNAME=test # or the username of the user you just created
+  BASIC_AUTH_TEST_PASSWORD=test # or the password of the user you just created
   DISPLAY_SQL_LOGS=true # or false to disable SQL logs like in production environment
   ENV_TEST=true # or false to disable actions only available in development environment
   ```
