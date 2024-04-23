@@ -60,6 +60,12 @@ That's it. You're ready to go! ✅
 
 ![API Database Diagram](db-diagram.png)
 
+### Code testing with [pytest](https://github.com/pytest-dev/pytest/)
+
+> :warning: Code testing is currently not available in this project. Please refer to this issue for more information: [#12](https://github.com/stephane-rbn/binbuddykorea-api/issues/12).
+- Integration tests and unit tests are available in the `tests` folder.
+- Run tests using the following command: `pytest` (or `python -m pytest`).
+
 ### Guidelines, linters and formatters
 
 - Use [ruff](https://github.com/astral-sh/ruff) for code linting and formatting.
