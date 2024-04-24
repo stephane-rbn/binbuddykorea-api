@@ -170,3 +170,6 @@ example-data.txt
 
 # Ignore ruff cache
 .ruff_cache
+
+# Ignore static files
+static/css/*.css
