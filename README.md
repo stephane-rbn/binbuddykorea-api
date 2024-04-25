@@ -34,7 +34,7 @@ Recycling in South Korea has now become easy.
 - Install project dependencies based on Pipfile: `pipenv install`.
 - Activate the virtual environment: `pipenv shell` (to deactivate a virtual environment: `exit`).
 
-## Setup PostgreSQL database
+## Set up PostgreSQL database
 
 - Install PostgreSQL 16 on your machine (you can use [Postgres.app](https://postgresapp.com/) on macOS and [EDB installer](https://www.postgresql.org/download/windows/) on Windows).
 - Create a new database called "binbuddykorea-dev" (you can use [pgAdmin](https://www.pgadmin.org/download/) to create a new database).
