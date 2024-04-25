@@ -63,18 +63,18 @@ Recycling in South Korea has now become easy.
 
 That's it. You're ready to go! ✅
 
-### API Database Diagram ([link to project](https://dbdiagram.io/d/BinBuddyKorea-API-65ddbb645cd0412774e91ee1))
+## API Database Diagram ([link to project](https://dbdiagram.io/d/BinBuddyKorea-API-65ddbb645cd0412774e91ee1))
 
 ![API Database Diagram](db-diagram.png)
 
-### Code testing with [pytest](https://github.com/pytest-dev/pytest/)
+## Code testing with [pytest](https://github.com/pytest-dev/pytest/)
 
 > :warning: Code testing is currently not available in this project. Please refer to this issue for more information: [#12](https://github.com/stephane-rbn/binbuddykorea-api/issues/12).
 
 - Integration tests and unit tests are available in the `tests` folder.
 - Run tests using the following command: `pytest` (or `python -m pytest`).
 
-### Guidelines, linters and formatters
+## Guidelines, linters and formatters
 
 - Use [ruff](https://github.com/astral-sh/ruff) for code linting and formatting.
 - Optional: use a _static type checker_ for Python like Microsoft's [Pyright](https://github.com/microsoft/pyright). Visual Studio Code users are recommended to use [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), an extension made by Microsoft and powered by Pyright. For others, feel free to look at this [installation guide](https://github.com/microsoft/pyright/blob/main/docs/installation.md).
