@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% block head %}
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>{% block title %}{% endblock %} - Bin Buddy Korea</title>
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='/css/style.css') }}"
+      />
+    {% endblock %}
+  </head>
+
+  <body>
+    {% block content %}{% endblock %}
+    <h1 class="p-4 bg-red-200">Hello, World</h1>
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+  </body>
+</html>
