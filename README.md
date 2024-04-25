@@ -18,14 +18,14 @@ Recycling in South Korea has now become easy.
 
 </div>
 
-## Project setup
+## Clone Project Repository
 
 - Clone project via CLI: `git clone git@github.com:stephane-rbn/binbuddykorea-api.git`.
 - Enter project folder: `cd binbuddykorea-api`.
 
 > **Note:** This project does not use Docker yet but it will be added in the future. For now, you need to have Python and PostgreSQL installed on your machine.
 
-### Install dependencies using [Pipenv](https://github.com/pypa/pipenv) and Pipfile
+## Install FastAPI's dependencies using [Pipenv](https://github.com/pypa/pipenv) and Pipfile
 
 > Pipenv is required to install project dependencies based on the Pipfile. However, you can install and use your own Python's interpreter and run `pipenv install --deploy --system` to install dependencies only without creating a virtual environment with Pipenv (you still may need to create one manually with [virtualenv](https://virtualenv.pypa.io/en/latest/) or [venv](https://docs.python.org/3/library/venv.html)).
 
@@ -34,7 +34,8 @@ Recycling in South Korea has now become easy.
 - Install project dependencies based on Pipfile: `pipenv install`.
 - Activate the virtual environment: `pipenv shell` (to deactivate a virtual environment: `exit`).
 
-### Setup PostgreSQL database
+## Setup PostgreSQL database
+
 - Install PostgreSQL 16 on your machine (you can use [Postgres.app](https://postgresapp.com/) on macOS and [EDB installer](https://www.postgresql.org/download/windows/) on Windows).
 - Create a new database called "binbuddykorea-dev" (you can use [pgAdmin](https://www.pgadmin.org/download/) to create a new database).
 - Create a user by running the following command: `python create_user.py`. You will be asked to enter a username and a password for the user you want to create. This user will be used for Basic Authentication in the development environment.
@@ -54,6 +55,12 @@ Recycling in South Korea has now become easy.
 - Optional: run `python seeds.py` to seed the database with initial data (only available in development environment).
 - Finally, you can run the project using the following command: `uvicorn main:app --reload`.
 
+## Set up the frontend part of the project
+
+- Install [Node.js](https://nodejs.org/en/download/) on your machine.
+- Run `npm install` at the root of the project to install the node dependencies.
+- Run `npm run dev` to start the frontend part of the project.
+
 That's it. You're ready to go! ✅
 
 ### API Database Diagram ([link to project](https://dbdiagram.io/d/BinBuddyKorea-API-65ddbb645cd0412774e91ee1))
@@ -63,10 +70,12 @@ That's it. You're ready to go! ✅
 ### Code testing with [pytest](https://github.com/pytest-dev/pytest/)
 
 > :warning: Code testing is currently not available in this project. Please refer to this issue for more information: [#12](https://github.com/stephane-rbn/binbuddykorea-api/issues/12).
+
 - Integration tests and unit tests are available in the `tests` folder.
 - Run tests using the following command: `pytest` (or `python -m pytest`).
 
 ### Guidelines, linters and formatters
 
 - Use [ruff](https://github.com/astral-sh/ruff) for code linting and formatting.
-- Optional: use a *static type checker* for Python like Microsoft's [Pyright](https://github.com/microsoft/pyright). Visual Studio Code users are recommended to use [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), an extension made by Microsoft and powered by Pyright. For others, feel free to look at this [installation guide](https://github.com/microsoft/pyright/blob/main/docs/installation.md).
+- Optional: use a _static type checker_ for Python like Microsoft's [Pyright](https://github.com/microsoft/pyright). Visual Studio Code users are recommended to use [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), an extension made by Microsoft and powered by Pyright. For others, feel free to look at this [installation guide](https://github.com/microsoft/pyright/blob/main/docs/installation.md).
+- [Prettier](https://github.com/prettier/prettier) is used for code formatting in the frontend part of the project, including Jinja2 templates. It is automatically installed as a dev dependency but you might have to look at the [documentation](https://prettier.io/docs/en/editors.html) to run it in your editor.
